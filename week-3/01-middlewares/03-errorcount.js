@@ -23,4 +23,11 @@ app.get('/errorCount', function(req, res) {
   res.status(200).json({ errorCount });
 });
 
+// The err parameter is used to capture any errors that might have occurred in the previous middleware or route handler.
+
+app.use((err, req, res, next) => {
+  res.status(404).send({});
+  errorCount++;
+});
+
 module.exports = app;

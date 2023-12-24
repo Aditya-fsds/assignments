@@ -11,10 +11,33 @@ const app = express();
 // You have been given a numberOfRequestsForUser object to start off with which
 // clears every one second
 
-let numberOfRequestsForUser = {};
+let numberOfRequestsForUser = {}
+
 setInterval(() => {
     numberOfRequestsForUser = {};
 }, 1000)
+
+// middleware to restrict the number of requests for user 
+
+app.use((req, res, next) => {
+  const userId = req.headers['user-id'];
+
+  // Check if there are previous requests for the user
+  
+  if (numberOfRequestsForUser[userId]) {
+    // If previous requests exist, increment the count
+    numberOfRequestsForUser[userId]++;
+  if (numberOfRequestsForUser[userId] > 5) {
+      return res.status(404).json({ 'msg': 'Limit exceeded for a particular user' });
+    } else {
+      next();
+    }
+  } else {
+    numberOfRequestsForUser[userId] = 1;
+    next();
+  }
+});
+
 
 app.get('/user', function(req, res) {
   res.status(200).json({ name: 'john' });

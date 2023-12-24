@@ -22,14 +22,16 @@ app.use(function(req, res, next) {
     numberOfRequestsForUser[userId] = numberOfRequestsForUser[userId] + 1;
     if (numberOfRequestsForUser[userId] > 5) {
       res.status(404).send("no entry");
-    } else {
+    }
+    else {
       next();
     }
-  } else {
+  }
+  else {
     numberOfRequestsForUser[userId] = 1;
     next();
   }
-})
+});
 
 
 app.get('/user', function(req, res) {
